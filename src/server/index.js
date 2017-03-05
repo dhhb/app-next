@@ -5,6 +5,7 @@ import express from 'express';
 import nunjucks from 'nunjucks';
 import compression from 'compression';
 import { host, port, env } from 'c0nfig';
+import api from './utils/api';
 
 const app = express();
 
@@ -14,7 +15,7 @@ if ('test' !== env) {
 
 nunjucks.configure(path.join(__dirname, './views'), {
   autoescape: true,
-  cache: false,
+  cache: (env !== 'development'),
   express: app
 });
 
@@ -22,8 +23,13 @@ app.disable('x-powered-by');
 app.use(compression());
 
 app.get('/', (req, res) => {
-  res.render('index.html', {
-    title: 'r-o-b.media'
+  api.getArticles({include: 'author,category'}).then(articles => {
+    res.render('index.html', {
+      title: 'r-o-b.media',
+      articles
+    });
+  }).catch(err => {
+    console.log(err);
   });
 });
 

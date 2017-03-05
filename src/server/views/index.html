@@ -2,4 +2,18 @@
 
 {% block content %}
   <h1>Main page</h1>
+  <div>
+  {% for article in articles %}
+    <div>
+      <img src="{{article.coverUrl}}" width="150" />
+      <h2>{{article.title}}</h2>
+      {% if article.category %}
+        <div>{{article.category.title}}</div>
+      {% endif %}
+      <div>{{article.intro}}</div>
+    </div>
+  {% else %}
+    <div>This would display if the 'item' collection were empty</div>
+  {% endfor %}
+  </div>
 {% endblock %}

@@ -24,9 +24,11 @@
   "dependencies": {
     "api-client-js": "github:dhhb/api-client-js",
     "babel-polyfill": "^6.23.0",
+    "body-parser": "^1.17.0",
     "c0nfig": "^0.2.2",
     "compression": "^1.6.2",
     "express": "^4.14.1",
+    "minigrid": "^3.1.1",
     "morgan": "^1.8.1",
     "nunjucks": "^3.0.0"
   },
