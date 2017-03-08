@@ -3,6 +3,7 @@ import path from 'path';
 import logger from 'morgan';
 import express from 'express';
 import nunjucks from 'nunjucks';
+import marked from 'marked';
 import compression from 'compression';
 import { host, port, env } from 'c0nfig';
 import api from './utils/api';
@@ -15,7 +16,6 @@ if ('test' !== env) {
 
 nunjucks.configure(path.join(__dirname, './views'), {
   autoescape: true,
-  cache: (env !== 'development'),
   express: app
 });
 
@@ -23,7 +23,10 @@ app.disable('x-powered-by');
 app.use(compression());
 
 app.get('/', (req, res) => {
-  api.getArticles({include: 'author,category'}).then(articles => {
+  api.getArticles({include: ['author', 'category']}).then(articles => {
+    articles.forEach(article => {
+      article.contentmd = marked(article.content).trim();
+    });
     res.render('index.html', {
       title: 'r-o-b.media',
       articles
