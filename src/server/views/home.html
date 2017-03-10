@@ -7,14 +7,20 @@
     <div>
       <img src="{{article.coverUrl}}" width="150" />
       <h2>{{article.title}}</h2>
+      <a href="/{{article.id}}">Go to page</a>
       {% if article.category %}
         <div>{{article.category.title}}</div>
       {% endif %}
-      <div>{{article.intro}}</div>
-      <div>{{article.contentmd | safe}}</div>
+      <div>{{article.introHTML | safe}}</div>
+      <div>{{article.contentHTML | safe}}</div>
     </div>
   {% else %}
     <div>This would display if the 'item' collection were empty</div>
   {% endfor %}
   </div>
+{% endblock %}
+
+{% block scripts %}
+  {{super()}}
+  <script src="./home.js"></script>
 {% endblock %}

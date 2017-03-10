@@ -6,7 +6,9 @@
   "scripts": {
     "nodemon": "nodemon -w ./src ./bin/runServer -e js,json,html",
     "start": "node ./bin/runServer",
-    "start-dev": "npm run nodemon",
+    "start-dev": "npm run build:watch & npm run nodemon",
+    "build:watch": "webpack --config webpack.config --colors --watch",
+    "build:prod": "NODE_ENV=production webpack --config webpack.config --progress --colors",
     "lint": "eslint ./src",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
@@ -40,7 +42,10 @@
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
     "eslint": "^3.16.1",
+    "extract-text-webpack-plugin": "^1.0.1",
     "nodemon": "^1.11.0",
+    "postcss-cssnext": "^2.9.0",
+    "postcss-import": "^9.1.0",
     "webpack": "^1.14.0"
   }
 }

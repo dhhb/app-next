@@ -21,15 +21,31 @@ nunjucks.configure(path.join(__dirname, './views'), {
 
 app.disable('x-powered-by');
 app.use(compression());
+app.use(express.static(path.join(__dirname, '../../public')));
 
 app.get('/', (req, res) => {
   api.getArticles({include: ['author', 'category']}).then(articles => {
     articles.forEach(article => {
-      article.contentmd = marked(article.content).trim();
+      article.introHTML = marked(article.intro).trim();
+      article.contentHTML = marked(article.content).trim();
     });
-    res.render('index.html', {
+    res.render('home.html', {
       title: 'r-o-b.media',
       articles
+    });
+  }).catch(err => {
+    console.log(err);
+  });
+});
+
+app.get('/:id', (req, res) => {
+  api.getArticle(req.params.id, {include: ['author', 'category']}).then(article => {
+    article.introHTML = marked(article.intro).trim();
+    article.contentHTML = marked(article.content).trim();
+
+    res.render('article.html', {
+      title: 'r-o-b.media',
+      article
     });
   }).catch(err => {
     console.log(err);
