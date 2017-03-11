@@ -3,13 +3,11 @@ import path from 'path';
 import logger from 'morgan';
 import express from 'express';
 import nunjucks from 'nunjucks';
-import marked from 'marked';
 import compression from 'compression';
-import Hashids from 'hashids';
 import { host, port, env } from 'c0nfig';
-import api from './utils/api';
+import * as routes from './routes';
+import * as middleware from './middleware';
 
-const hashids = new Hashids();
 const app = express();
 
 if ('test' !== env) {
@@ -25,67 +23,14 @@ app.disable('x-powered-by');
 app.use(compression());
 app.use(express.static(path.join(__dirname, '../../public')));
 
-app.get('/', (req, res) => {
-  api.getArticles({include: ['author', 'category']}).then(articles => {
-    articles.forEach(article => {
-      article.shortId = hashids.encodeHex(article.id);
+app.use(middleware.addCommonLocals);
+app.use(middleware.serveAssets());
 
-      if (article.intro) {
-        article.introHTML = marked(article.intro).trim();
-      }
+app.use('/ping', (req, res) => res.send('pong ^.^'));
+app.use('/', routes.main());
 
-      if (article.content) {
-        article.contentHTML = marked(article.content).trim();
-      }
-    });
-    res.render('home.html', {
-      title: 'r-o-b.media',
-      articles
-    });
-  }).catch(err => {
-    console.log(err);
-  });
-});
-
-app.get('/by-id/:id', (req, res) => {
-  api.getArticle(req.params.id, {include: ['author', 'category']}).then(article => {
-    if (article.intro) {
-      article.introHTML = marked(article.intro).trim();
-    }
-
-    if (article.content) {
-      article.contentHTML = marked(article.content).trim();
-    }
-
-    res.render('article.html', {
-      title: 'r-o-b.media',
-      article
-    });
-  }).catch(err => {
-    console.log(err);
-  });
-});
-
-app.get('/:shortId/:slug', (req, res) => {
-  const id = hashids.decodeHex(req.params.shortId);
-
-  api.getArticle(id, {include: ['author', 'category']}).then(article => {
-    if (article.intro) {
-      article.introHTML = marked(article.intro).trim();
-    }
-
-    if (article.content) {
-      article.contentHTML = marked(article.content).trim();
-    }
-
-    res.render('article.html', {
-      title: 'r-o-b.media',
-      article
-    });
-  }).catch(err => {
-    console.log(err);
-  });
-});
+app.use(middleware.handleErrors);
+app.use(middleware.handleNotFound);
 
 export function start() {
   http.createServer(app).listen(port, () => {
