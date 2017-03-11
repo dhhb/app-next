@@ -11,7 +11,22 @@ export default function () {
     getArticles
   );
 
+  router.get('/categories/:filter',
+    populateFilter('category'),
+    getArticles
+  );
+
+  router.get('/keywords/:filter',
+    populateFilter('keywords'),
+    getArticles
+  );
+
   router.get('/by-id/:id',
+    getArticleById
+  );
+
+  router.get('/s/:shortId',
+    extractIdFromShortId,
     getArticleById
   );
 
@@ -44,9 +59,21 @@ export default function () {
     next();
   }
 
+
+  function populateFilter (filter) {
+    return (req, res, next) => {
+      req.articlesFilter = {[filter]: req.params.filter};
+
+      next();
+    };
+  }
+
   async function getArticles (req, res, next) {
     try {
-      const articles = await api.getArticles({include: ['author', 'category']});
+      const articles = await api.getArticles({
+        include: ['author', 'category'],
+        filter: req.articlesFilter || {}
+      });
 
       res.render('home.html', {
         articles: articles.map(transformArticle)

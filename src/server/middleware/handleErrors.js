@@ -9,6 +9,10 @@ export default function (err, req, res, next) {
 
   const errLocals = {};
 
+  if (isDevelopment) {
+    console.log(err);
+  }
+
   if (err.stack && isDevelopment) {
     errLocals.stack = err.stack;
     console.error(err.stack);
