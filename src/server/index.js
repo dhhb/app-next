@@ -5,9 +5,11 @@ import express from 'express';
 import nunjucks from 'nunjucks';
 import marked from 'marked';
 import compression from 'compression';
+import Hashids from 'hashids';
 import { host, port, env } from 'c0nfig';
 import api from './utils/api';
 
+const hashids = new Hashids();
 const app = express();
 
 if ('test' !== env) {
@@ -26,8 +28,15 @@ app.use(express.static(path.join(__dirname, '../../public')));
 app.get('/', (req, res) => {
   api.getArticles({include: ['author', 'category']}).then(articles => {
     articles.forEach(article => {
-      article.introHTML = marked(article.intro).trim();
-      article.contentHTML = marked(article.content).trim();
+      article.shortId = hashids.encodeHex(article.id);
+
+      if (article.intro) {
+        article.introHTML = marked(article.intro).trim();
+      }
+
+      if (article.content) {
+        article.contentHTML = marked(article.content).trim();
+      }
     });
     res.render('home.html', {
       title: 'r-o-b.media',
@@ -38,10 +47,36 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/:id', (req, res) => {
+app.get('/by-id/:id', (req, res) => {
   api.getArticle(req.params.id, {include: ['author', 'category']}).then(article => {
-    article.introHTML = marked(article.intro).trim();
-    article.contentHTML = marked(article.content).trim();
+    if (article.intro) {
+      article.introHTML = marked(article.intro).trim();
+    }
+
+    if (article.content) {
+      article.contentHTML = marked(article.content).trim();
+    }
+
+    res.render('article.html', {
+      title: 'r-o-b.media',
+      article
+    });
+  }).catch(err => {
+    console.log(err);
+  });
+});
+
+app.get('/:shortId/:slug', (req, res) => {
+  const id = hashids.decodeHex(req.params.shortId);
+
+  api.getArticle(id, {include: ['author', 'category']}).then(article => {
+    if (article.intro) {
+      article.introHTML = marked(article.intro).trim();
+    }
+
+    if (article.content) {
+      article.contentHTML = marked(article.content).trim();
+    }
 
     res.render('article.html', {
       title: 'r-o-b.media',

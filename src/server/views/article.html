@@ -3,7 +3,9 @@
 {% block content %}
   <h1>Article page - {{article.id}}</h1>
   <div>
-    <img src="{{article.coverUrl}}" width="150" />
+    {% if article.coverUrl %}
+      <img src="{{article.coverUrl}}" width="300" />
+    {% endif %}
     <h2>{{article.title}}</h2>
     {% if article.category %}
       <div>{{article.category.title}}</div>
@@ -15,5 +17,5 @@
 
 {% block scripts %}
   {{super()}}
-  <script src="./article.js"></script>
+  <script src="/article.js"></script>
 {% endblock %}

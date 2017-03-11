@@ -29,10 +29,13 @@
     "c0nfig": "^0.2.2",
     "compression": "^1.6.2",
     "express": "^4.14.1",
+    "hashids": "^1.1.1",
     "marked": "^0.3.6",
     "minigrid": "^3.1.1",
     "morgan": "^1.8.1",
-    "nunjucks": "^3.0.0"
+    "nunjucks": "^3.0.0",
+    "short-uuid": "^2.2.0",
+    "validator": "^7.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
