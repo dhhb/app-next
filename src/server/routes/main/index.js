@@ -11,13 +11,13 @@ export default function () {
     getArticles
   );
 
-  router.get('/categories/:filter',
-    populateFilter('category'),
+  router.get('/categories/:shortId',
+    populateCategoryFilter,
     getArticles
   );
 
-  router.get('/keywords/:filter',
-    populateFilter('keywords'),
+  router.get('/keywords/:keyword',
+    populateKeywordsFilter,
     getArticles
   );
 
@@ -28,6 +28,10 @@ export default function () {
   router.get('/s/:shortId',
     extractIdFromShortId,
     getArticleById
+  );
+
+  router.get('/p/:slug',
+    getArticleBySlug
   );
 
   router.get('/:shortId/:slug',
@@ -46,6 +50,10 @@ export default function () {
       article.contentHTML = marked(article.content).trim();
     }
 
+    if (article.category) {
+      article.category.shortId = hashids.encodeHex(article.category.id);
+    }
+
     return article;
   }
 
@@ -59,13 +67,18 @@ export default function () {
     next();
   }
 
+  function populateCategoryFilter (req, res, next) {
+    const categoryId = hashids.decodeHex(req.params.shortId);
 
-  function populateFilter (filter) {
-    return (req, res, next) => {
-      req.articlesFilter = {[filter]: req.params.filter};
+    req.articlesFilter = {category: categoryId};
 
-      next();
-    };
+    next();
+  }
+
+  function populateKeywordsFilter (req, res, next) {
+    req.articlesFilter = {keywords: req.params.keyword};
+
+    next();
   }
 
   async function getArticles (req, res, next) {
@@ -86,6 +99,26 @@ export default function () {
   async function getArticleById (req, res, next) {
     try {
       const article = await api.getArticle(req.params.id, {include: ['author', 'category']});
+
+      res.render('article.html', {
+        article: transformArticle(article)
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async function getArticleBySlug (req, res, next) {
+    try {
+      const articles = await api.getArticles({
+        include: ['author', 'category'],
+        filter: {slug: req.params.slug}
+      });
+      const article = articles[0];
+
+      if (!article) {
+        return next();
+      }
 
       res.render('article.html', {
         article: transformArticle(article)
