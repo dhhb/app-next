@@ -6,29 +6,28 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Main page</h1>
-  <div>
-  {% for article in articles %}
-    <div>
-      {% if article.coverUrl %}
-        <img src="{{article.coverUrl}}" width="300" />
-      {% endif %}
-      <h2>{{article.title}}</h2>
-      {% if article.slug %}
-        <a href="/p/{{article.slug}}">Go to page</a>
+  <div class="home-page">
+    <div class="home-articles-list">
+      {% for article in articles %}
+        <div class="home-articles-item">
+          {% if article.coverUrl %}
+            <img src="{{article.coverUrl}}" width="300" />
+          {% endif %}
+          <h2>{{article.title}}</h2>
+          {% if article.slug %}
+            <a href="/p/{{article.slug}}">Go to page</a>
+          {% else %}
+            <a href="/s/{{article.shortId}}">Go to page</a>
+          {% endif %}
+          {% if article.category %}
+            <div>{{article.category.title}}</div>
+          {% endif %}
+          <div>{{article.introHTML | safe | truncate(300)}}</div>
+        </div>
       {% else %}
-        <a href="/s/{{article.shortId}}">Go to page</a>
-      {% endif %}
-      {% if article.category %}
-        <div>{{article.category.title}}</div>
-      {% endif %}
-      <div>{{article.introHTML | safe}}</div>
-      <div>{{article.contentHTML | safe}}</div>
-      <hr />
+        <div>This would display if the 'item' collection were empty</div>
+      {% endfor %}
     </div>
-  {% else %}
-    <div>This would display if the 'item' collection were empty</div>
-  {% endfor %}
   </div>
 {% endblock %}
 

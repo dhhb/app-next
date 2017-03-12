@@ -1,0 +1,15 @@
+.home-articles-list {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+
+  .home-articles-item {
+    width: 200px;
+    font-size: 13px;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
