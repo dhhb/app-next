@@ -1,17 +1,24 @@
 {% extends "base.html" %}
 
+{% block styles %}
+  {{super()}}
+  <link rel="stylesheet" href="{{assets.article.css}}" />
+{% endblock %}
+
 {% block content %}
-  <h1>Article page - {{article.id}}</h1>
-  <div>
-    {% if article.coverUrl %}
-      <img src="{{article.coverUrl}}" width="300" />
-    {% endif %}
-    <h2>{{article.title}}</h2>
-    {% if article.category %}
-      <div>{{article.category.title}}</div>
-    {% endif %}
-    <div>{{article.introHTML | safe}}</div>
-    <div>{{article.contentHTML | safe}}</div>
+  <div class="article-page">
+    <h1>Article page - {{article.id}}</h1>
+    <div>
+      {% if article.coverUrl %}
+        <img src="{{article.coverUrl}}" width="300" />
+      {% endif %}
+      <h2>{{article.title}}</h2>
+      {% if article.category %}
+        <div>{{article.category.title}}</div>
+      {% endif %}
+      <div>{{article.introHTML | safe}}</div>
+      <div>{{article.contentHTML | safe}}</div>
+    </div>
   </div>
 {% endblock %}
 

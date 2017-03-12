@@ -4,6 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const cssnext = require('postcss-cssnext');
+const postcssNested = require('postcss-nested');
 const postcssImport = require('postcss-import');
 const config = require('c0nfig');
 
@@ -68,9 +69,6 @@ module.exports = {
       test: /\.css$/,
       loader: ExtractTextPlugin.extract('style-loader', 'css!postcss')
     },{
-      test: /\.scss$/,
-      loader: ExtractTextPlugin.extract('style-loader', 'css!sass')
-    },{
       test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
       loader: 'file-loader'
     },{
@@ -92,7 +90,7 @@ module.exports = {
   },
 
   postcss: function () {
-    return [postcssImport, cssnext];
+    return [postcssNested, postcssImport, cssnext];
   }
 };
 
