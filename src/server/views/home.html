@@ -9,10 +9,10 @@
         <img src="{{article.coverUrl}}" width="300" />
       {% endif %}
       <h2>{{article.title}}</h2>
-      {% if article.shortId and article.slug %}
-        <a href="/{{article.shortId}}/{{article.slug}}">Go to page</a>
+      {% if article.slug %}
+        <a href="/p/{{article.slug}}">Go to page</a>
       {% else %}
-        <a href="/by-id/{{article.id}}">Go to page</a>
+        <a href="/s/{{article.shortId}}">Go to page</a>
       {% endif %}
       {% if article.category %}
         <div>{{article.category.title}}</div>

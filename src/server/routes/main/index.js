@@ -2,40 +2,42 @@ import express from 'express';
 import marked from 'marked';
 import Hashids from 'hashids';
 import api from '../../utils/api';
+import cache from '../../utils/cache';
 
 export default function () {
   const router = express.Router();
   const hashids = new Hashids();
 
   router.get('/',
+    getCategories,
     getArticles
   );
 
-  router.get('/categories/:shortId',
+  router.get('/c/:shortId/:title',
+    getCategories,
     populateCategoryFilter,
     getArticles
   );
 
   router.get('/keywords/:keyword',
+    getCategories,
     populateKeywordsFilter,
     getArticles
   );
 
-  router.get('/by-id/:id',
-    getArticleById
-  );
-
   router.get('/s/:shortId',
+    getCategories,
     extractIdFromShortId,
     getArticleById
   );
 
   router.get('/p/:slug',
+    getCategories,
     getArticleBySlug
   );
 
-  router.get('/:shortId/:slug',
-    extractIdFromShortId,
+  router.get('/by-id/:id',
+    getCategories,
     getArticleById
   );
 
@@ -51,10 +53,16 @@ export default function () {
     }
 
     if (article.category) {
-      article.category.shortId = hashids.encodeHex(article.category.id);
+      transformCategory(article.category);
     }
 
     return article;
+  }
+
+  function transformCategory (category) {
+    category.shortId = hashids.encodeHex(category.id);
+
+    return category;
   }
 
   function extractIdFromShortId (req, res, next) {
@@ -79,6 +87,26 @@ export default function () {
     req.articlesFilter = {keywords: req.params.keyword};
 
     next();
+  }
+
+  async function getCategories (req, res, next) {
+    try {
+      const cachedCategories = cache.get('categories');
+
+      if (cachedCategories) {
+        res.locals.categories = cachedCategories;
+      } else {
+        const categories = await api.getCategories();
+        const transformedCategories = categories.map(transformCategory);
+        res.locals.categories = transformedCategories;
+
+        cache.set('categories', transformedCategories);
+      }
+
+      next();
+    } catch (err) {
+      next(err);
+    }
   }
 
   async function getArticles (req, res, next) {

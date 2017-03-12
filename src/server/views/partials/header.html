@@ -1,1 +1,10 @@
 <h1>Header</h1>
+<div>
+  {% for category in categories %}
+    <div>
+      <a href="/c/{{category.shortId}}/{{category.title}}">{{category.title}}</a>
+    </div>
+  {% else %}
+    <div>No categories</div>
+  {% endfor %}
+</div>
