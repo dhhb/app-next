@@ -7,23 +7,33 @@
 
 {% block content %}
   <div class="home-page">
-    <div class="home-articles-list">
+    <div id="articles" class="home-articles-list lazy">
       {% for article in articles %}
-        <div class="home-articles-item">
-          {% if article.coverUrl %}
-            <img src="{{article.coverUrl}}" width="300" />
-          {% endif %}
-          <h2>{{article.title}}</h2>
+        <article class="home-articles-item relative">
           {% if article.slug %}
-            <a href="/p/{{article.slug}}">Go to page</a>
+            <a class="absolute top-0 left-0 right-0 bottom-0 z1" href="/p/{{article.slug}}"></a>
           {% else %}
-            <a href="/s/{{article.shortId}}">Go to page</a>
+            <a class="absolute top-0 left-0 right-0 bottom-0 z1" href="/s/{{article.shortId}}"></a>
           {% endif %}
-          {% if article.category %}
-            <div>{{article.category.title}}</div>
+
+          {% if article.previewImageUrl %}
+            <img src="{{article.previewImageUrl}}" />
+          {% elif article.coverUrl %}
+            <img src="{{article.coverUrl}}" />
           {% endif %}
-          <div>{{article.introHTML | safe | truncate(300)}}</div>
-        </div>
+
+          <div class="meta mt1 relative">
+            {% if article.category %}
+              <a href="/c/{{article.category.shortId}}/{{article.category.title}}" class="category relative z2">{{article.category.title}}</a>
+            {% endif %}
+
+            <div class="time">{{article.time}}</div>
+          </div>
+
+          <h2 class="title h3 m0 mt1 mb1">{{article.title}}</h2>
+
+          <div class="intro">{{article.introHTML | safe | truncate(300)}}</div>
+        </article>
       {% else %}
         <div>This would display if the 'item' collection were empty</div>
       {% endfor %}

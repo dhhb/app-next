@@ -1,5 +1,28 @@
 @import 'normalize.css';
 
+/* https://basscss.com/v7/docs */
+@import 'basscss-base-reset';
+@import 'basscss-base-typography';
+@import 'basscss-color-base';
+@import 'basscss-type-scale';
+@import 'basscss-typography';
+@import 'basscss-layout';
+@import 'basscss-align';
+@import 'basscss-margin';
+@import 'basscss-padding';
+@import 'basscss-position';
+@import 'basscss-responsive-states';
+@import 'basscss-grid';
+@import 'flex-object';
+@import 'basscss-border';
+@import 'basscss-colors';
+@import 'basscss-background-colors';
+@import 'basscss-defaults';
+
+@import 'animate.css';
+
+@import './variables';
+
 html {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -10,9 +33,107 @@ html {
 }
 
 body {
-  font-family: var(--fonts);
+  // font-family: var(--fonts);
 }
 
-:root {
-  --fonts: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 50px;
+  z-index: 1000;
+  background-color: rgba(255,255,255,.9234);
+  border-bottom: 2px solid #333;
+
+  .header-inner {
+    max-width: var(--container-width);
+    width: 100%;
+    padding: 0 36px;
+    line-height: 42px;
+  }
+
+  .logo {
+    color: #333;
+    float: left;
+    font-weight: bold;
+    height: 50px;
+    text-decoration: none;
+    outline: none;
+  }
+
+  .header-category-nav {
+    display: inline-block;
+    height: 100%;
+    margin-top: 1px;
+    margin-left: 50px;
+    text-align: center;
+    .header-category-item {
+      display: inline-block;
+      height: 100%;
+      margin: 0 7px;
+      a {
+        color: #333;
+        font-size: 12px;
+        text-decoration: none;
+        outline: none;
+        border-bottom: 0 solid #333;
+      }
+      a:hover,
+      a:focus {
+        border-width: 2px;
+      }
+    }
+  }
+}
+
+.rob-brand {
+  display: inline-block;
+  user-select: none;
+  &-char {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    vertical-align: middle;
+    transition: all .3s ease;
+    &.r {
+      &:after {
+        content: 'Р'
+      }
+    }
+    &.o {
+      background-image: url('./assets/rob-brand.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 18px;
+      width: 18px;
+      height: 18px;
+      margin: 0 8px;
+    }
+    &.b {
+      &:after {
+        content: 'Б'
+      }
+    }
+  }
+  &:hover {
+    .rob-brand-char {
+      color: var(--brand-red);
+    }
+    .o {
+      background-image: url('./assets/rob-brand-red.svg');
+    }
+  }
+}
+
+.container {
+  width: 100%;
+  padding: 50px 0 0;
+}
+
+.lazy {
+  visibility: hidden;
+  opacity: 0;
 }

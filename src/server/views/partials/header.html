@@ -1,10 +1,23 @@
-<h1>Header</h1>
-<div>
-  {% for category in categories %}
-    <div>
-      <a href="/c/{{category.shortId}}/{{category.title}}">{{category.title}}</a>
-    </div>
-  {% else %}
-    <div>No categories</div>
-  {% endfor %}
-</div>
+{% macro logo() %}
+  <a href="/" class="logo rob-brand">
+    <span class="rob-brand-char r"></span>
+    <span class="rob-brand-char o"></span>
+    <span class="rob-brand-char b"></span>
+  </a>
+{% endmacro %}
+
+<header class="header">
+  <div class="header-inner mx-auto">
+  {{logo()}}
+
+  {% if categories | length %}
+    <nav class="header-category-nav">
+      {% for category in categories %}
+        <div class="header-category-item">
+          <a href="/c/{{category.shortId}}/{{category.title}}" class="bold caps">{{category.title}}</a>
+        </div>
+      {% endfor %}
+    </nav>
+  {% endif %}
+  </div>
+</header>

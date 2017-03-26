@@ -68,16 +68,10 @@ module.exports = {
     }, {
       test: /\.css$/,
       loader: ExtractTextPlugin.extract('style-loader', 'css!postcss')
-    },{
-      test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-      loader: 'file-loader'
-    },{
-      test: /\.(png|jpe?g|gif|svg)(\?\S*)?$/,
-      loader: 'file-loader',
-      query: {
-        name: '[name].[ext]?[hash]'
-      }
-    },{
+    }, {
+      test: /\.(png|jpe?g|gif|eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+      loaders: ['url?limit=10000', 'image-webpack?bypassOnDebug']
+    }, {
       test: /\.vue$/,
       loaders: ['vue']
     }]
@@ -91,6 +85,15 @@ module.exports = {
 
   postcss: function () {
     return [postcssNested, postcssImport, cssnext];
+  },
+
+  imageWebpackLoader: {
+    gifsicle: {
+      interlaced: false
+    },
+    optipng: {
+      optimizationLevel: 7
+    }
   }
 };
 

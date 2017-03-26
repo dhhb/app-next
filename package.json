@@ -23,15 +23,19 @@
   },
   "homepage": "https://github.com/dhhb/app-next#readme",
   "dependencies": {
+    "animate.css": "^3.5.2",
     "api-client-js": "github:dhhb/api-client-js",
     "babel-polyfill": "^6.23.0",
+    "basscss": "^7.1.1",
     "body-parser": "^1.17.0",
     "c0nfig": "^0.2.2",
+    "classlist-polyfill": "^1.0.3",
     "compression": "^1.6.2",
     "express": "^4.14.1",
     "hashids": "^1.1.1",
     "marked": "^0.3.6",
     "minigrid": "^3.1.1",
+    "moment": "^2.18.1",
     "morgan": "^1.8.1",
     "node-cache": "^4.1.1",
     "normalize.css": "^5.0.0",
@@ -54,6 +58,7 @@
     "eslint": "^3.16.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.10.1",
+    "image-webpack-loader": "^3.3.0",
     "node-sass": "^4.5.0",
     "nodemon": "^1.11.0",
     "postcss-cssnext": "^2.9.0",
@@ -62,6 +67,7 @@
     "postcss-nested": "^1.0.0",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.2",
+    "url-loader": "^0.5.8",
     "webpack": "^1.14.0"
   }
 }

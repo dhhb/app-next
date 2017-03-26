@@ -1,8 +1,11 @@
 import express from 'express';
 import marked from 'marked';
 import Hashids from 'hashids';
+import moment from 'moment';
 import api from '../../utils/api';
 import cache from '../../utils/cache';
+
+import 'moment/locale/ru';
 
 export default function () {
   const router = express.Router();
@@ -55,6 +58,9 @@ export default function () {
     if (article.category) {
       transformCategory(article.category);
     }
+
+    moment.locale('ru');
+    article.time = moment(article.updatedAt).format('LL').replace('г.', '');
 
     return article;
   }
