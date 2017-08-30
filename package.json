@@ -10,7 +10,8 @@
     "build:watch": "webpack --config webpack.config --colors --watch",
     "build:prod": "NODE_ENV=production webpack --config webpack.config --progress --colors",
     "lint": "eslint ./src",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "postinstall": "npm run build:prod"
   },
   "repository": {
     "type": "git",
