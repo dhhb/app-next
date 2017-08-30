@@ -2,6 +2,7 @@ import express from 'express';
 import marked from 'marked';
 import Hashids from 'hashids';
 import moment from 'moment';
+import sortBy from 'lodash/sortBy';
 import api from '../../utils/api';
 import cache from '../../utils/cache';
 
@@ -45,6 +46,7 @@ export default function () {
   );
 
   function transformArticle (article) {
+    console.log(article.publishedAt)
     article.shortId = hashids.encodeHex(article.id);
 
     if (article.intro) {
@@ -106,7 +108,7 @@ export default function () {
         const transformedCategories = categories.map(transformCategory);
         res.locals.categories = transformedCategories;
 
-        cache.set('categories', transformedCategories);
+        cache.set('categories', transformedCategories, 1000 * 60);
       }
 
       next();
@@ -123,7 +125,10 @@ export default function () {
       });
 
       res.render('home.html', {
-        articles: articles.map(transformArticle)
+        // TBD: sort should be done via API query
+        articles: articles.sort((a1, a2) => {
+          return new Date(a2.publishedAt).getTime() - new Date(a1.publishedAt).getTime();
+        }).map(transformArticle)
       });
     } catch (err) {
       next(err);

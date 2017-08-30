@@ -1,6 +1,22 @@
 .article-page {
-  padding: 0 36px;
+  padding: 36px 36px 60px;
+
   h1 {
     color: #f80;
+  }
+
+  .category {
+    display: inline-block;
+    background-color: #000;
+    color: #fff;
+    position: relative;
+    margin-bottom: 10px;
+    font-size: 9px;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 2px 4px 2px;
+    letter-spacing: .5px;
+    transition: all .2s ease;
   }
 }

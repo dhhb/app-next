@@ -9,6 +9,10 @@
   .home-articles-item {
     width: 270px;
 
+    .meta {
+      height: 24px;
+    }
+
     .category {
       display: inline-block;
       background-color: #000;
