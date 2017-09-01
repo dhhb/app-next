@@ -2,7 +2,6 @@ import express from 'express';
 import marked from 'marked';
 import Hashids from 'hashids';
 import moment from 'moment';
-import sortBy from 'lodash/sortBy';
 import api from '../../utils/api';
 import cache from '../../utils/cache';
 
@@ -46,7 +45,6 @@ export default function () {
   );
 
   function transformArticle (article) {
-    console.log(article.publishedAt)
     article.shortId = hashids.encodeHex(article.id);
 
     if (article.intro) {
